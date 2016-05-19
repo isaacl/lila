@@ -321,7 +321,7 @@ object ApplicationBuild extends Build {
   )
 
 
-  lazy val notif = project("notif", Seq(common, db, user, hub)).settings(
+  lazy val notif = project("notif", Seq(common, db, forum, user, hub)).settings(
     libraryDependencies ++= provided(play.api)
   )
 
