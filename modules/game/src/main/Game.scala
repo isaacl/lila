@@ -119,9 +119,13 @@ case class Game(
       history <- clockHistory
       clockTimes = history.get(color)
     } yield Centis(0) :: {
-      (clockTimes.iterator zip clockTimes.iterator.drop(1)).map {
-        case (first, second) => (first - second + inc) atLeast 0
-      }.toList
+      val diffs = (clockTimes.iterator zip clockTimes.iterator.drop(1)) map {
+        case (first, second) => first - second
+      }
+
+      diffs map {
+        _ + (diffs.hasNext || !finished || color != turnColor).fold(inc, Centis(0))
+      } map { _ atLeast 0 } toList
     }
   } orElse binaryMoveTimes.map { binary =>
     // TODO: make movetime.read return List after writes are disabled.
