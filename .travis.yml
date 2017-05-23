@@ -20,7 +20,7 @@ env:
    - secure: "VkgJ78marLdG8JQrWV3UhcxXyWmdy6BV3gYLTyXpK2ltPA4vGkFilZDc8hMx2VhYeeTXyvXB+PM4xkB40PUnDlmNXIWQlG7IxKIb/zxwUVS+WcvAzM6yqEV9B/UbZO+Mgp2Hl4/F1lMoIpdQ0tkRvHmfw01L9VDrQs4Otdmd38o=" # GITHUB_API_TOKEN
 
 git:
-  depth: 3
+  depth: 1
   submodules: false
 
 install: ./bin/submodule-setup.sh
