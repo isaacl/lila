@@ -93,8 +93,8 @@ export default class RoundController {
       if (this.clock) {
         const tickNow = () => {
           this.clock!.tick();
-          this.clockCallback = window.requestIdleCallback !== undefined ?
-              window.requestIdleCallback(tickNow) :
+          this.clockCallback = window.requestAnimationFrame !== undefined ?
+              window.requestAnimationFrame(tickNow) :
               setTimeout(tickNow, 50);
         };
         setTimeout(tickNow, 100);
@@ -440,7 +440,7 @@ export default class RoundController {
     this.onChange();
     this.setLoading(false);
     if (this.keyboardMove) this.keyboardMove.update(d.steps[d.steps.length - 1]);
-    if (!game.playable(d)) (window.cancelIdleCallback || clearTimeout)(this.clockCallback!);
+    if (!game.playable(d)) (window.cancelAnimationFrame || clearTimeout)(this.clockCallback!);
   };
 
   endWithData = (o: ApiEnd): void => {
@@ -462,7 +462,7 @@ export default class RoundController {
     this.setLoading(false);
     this.redraw();
     this.autoScroll();
-    (window.cancelIdleCallback || clearTimeout)(this.clockCallback!);
+    (window.cancelAnimationFrame || clearTimeout)(this.clockCallback!);
     this.onChange();
   };
 
