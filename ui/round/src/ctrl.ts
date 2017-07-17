@@ -61,6 +61,7 @@ export default class RoundController {
   justCaptured?: cg.Piece;
   shouldSendMoveTime: boolean = false;
   preDrop?: cg.Role;
+  clockCallback ?: number;
   lastDrawOfferAtPly?: Ply;
 
   private music?: any;
@@ -88,13 +89,17 @@ export default class RoundController {
     });
     else this.makeCorrespondenceClock();
 
-    if (this.clock) {
-      const tickNow = () => {
-        this.clock!.tick();
-        if (game.playable(this.data)) setTimeout(tickNow, 100);
-      };
-      setTimeout(tickNow, 100);
-    } else setInterval(this.corresClockTick, 1000);
+    if (game.playable(d)) {
+      if (this.clock) {
+        const tickNow = () => {
+          this.clock!.tick();
+          this.clockCallback = window.requestIdleCallback !== undefined ?
+              window.requestIdleCallback(tickNow) :
+              setTimeout(tickNow, 50);
+        };
+        setTimeout(tickNow, 100);
+      } else setInterval(this.corresClockTick, 1000);
+    }
 
     this.setQuietMode();
 
@@ -299,7 +304,8 @@ export default class RoundController {
 
   apiMove = (o: ApiMove): void => {
     const d = this.data,
-    playing = game.isPlayerPlaying(d);
+    playable = game.playable(d),
+    playing = playable && !d.player.spectator;
 
     d.game.turns = o.ply;
     d.game.player = o.ply % 2 === 0 ? 'white' : 'black';
@@ -434,6 +440,7 @@ export default class RoundController {
     this.onChange();
     this.setLoading(false);
     if (this.keyboardMove) this.keyboardMove.update(d.steps[d.steps.length - 1]);
+    if (!game.playable(d)) (window.cancelIdleCallback || clearTimeout)(this.clockCallback!);
   };
 
   endWithData = (o: ApiEnd): void => {
@@ -455,6 +462,7 @@ export default class RoundController {
     this.setLoading(false);
     this.redraw();
     this.autoScroll();
+    (window.cancelIdleCallback || clearTimeout)(this.clockCallback!);
     this.onChange();
   };
 

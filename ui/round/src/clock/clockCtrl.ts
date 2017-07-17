@@ -36,6 +36,7 @@ interface Times {
 type ColorMap<T> = { [C in Color]: T };
 
 export interface ClockElements {
+  lastHtml ?: string;
   time?: HTMLElement;
   bar?: HTMLElement;
 }

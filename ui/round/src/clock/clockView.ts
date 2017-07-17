@@ -81,8 +81,13 @@ function showBar(ctrl: ClockController, els: ClockElements, millis: Millis, bers
 }
 
 export function updateElements(clock: ClockController, els: ClockElements, millis: Millis) {
-  if (els.time) els.time.innerHTML = formatClockTime(clock.showTenths, millis, true);
-  if (els.bar) els.bar.style.width = clock.timePercent(millis) + '%';
+  if (els.time !== undefined) {
+    const newHtml = formatClockTime(clock.showTenths, millis, true);
+    if (newHtml !== els.lastHtml) {
+      els.time.innerHTML = els.lastHtml = newHtml;
+      if (els.bar !== undefined) els.bar.style.width = clock.timePercent(millis) + '%';
+    }
+  }
 }
 
 function showBerserk(ctrl: RoundController, color: Color): boolean {
