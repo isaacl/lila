@@ -43,10 +43,10 @@ square {
   &.current-premove {
     background-color: rgba(20, 30, 85, 0.5);
   }
-  &.move-dest:hover {
+  &.move-dest:hover, &.move-dest.dragover {
     background: rgba(20, 85, 30, 0.3);
   }
-  &.premove-dest:hover {
+  &.premove-dest:hover, &.premove-dest.dragover {
     background: rgba(20, 30, 85, 0.2);
   }
   &.bh1 piece {
@@ -66,6 +66,7 @@ piece {
   &.dragging {
     cursor: move;
     z-index: z('cg__piece.dragging');
+    pointer-events: auto;
   }
   &.anim {
     z-index: z('cg__piece.anim');
