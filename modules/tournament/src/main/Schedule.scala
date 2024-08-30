@@ -310,9 +310,9 @@ object Schedule:
 
       case (Unique, _, _) => 60 * 6
 
-  private val standardIncHours         = Set(1, 7, 13, 19)
-  private def standardInc(s: Schedule) = standardIncHours(s.at.getHour)
-  private def zhInc(s: Schedule)       = s.at.getHour % 2 == 0
+  private val standardIncHours          = Set(1, 7, 13, 19)
+  private def standardInc(s: Schedule)  = standardIncHours(s.at.getHour)
+  private def bottomOfHour(s: Schedule) = s.at.getMinute > 29
 
   private given Conversion[Int, LimitSeconds]     = LimitSeconds(_)
   private given Conversion[Int, IncrementSeconds] = IncrementSeconds(_)
@@ -334,10 +334,12 @@ object Schedule:
 
     (s.freq, s.variant, s.speed) match
       // Special cases.
-      case (Weekend, Crazyhouse, Blitz)                 => zhEliteTc(s)
-      case (Hourly, Crazyhouse, SuperBlitz) if zhInc(s) => TC(3 * 60, 1)
-      case (Hourly, Crazyhouse, Blitz) if zhInc(s)      => TC(4 * 60, 2)
-      case (Hourly, Standard, Blitz) if standardInc(s)  => TC(3 * 60, 2)
+      case (Weekend, Crazyhouse, Blitz) => zhEliteTc(s)
+
+      case (Hourly, Standard, Blitz) if standardInc(s)             => TC(3 * 60, 2)
+      case (Hourly, Antichess | Atomic, Bullet) if bottomOfHour(s) => TC(0, 2)
+      case (Hourly, variant, HippoBullet) if variant.exotic        => TC(2 * 60, 1)
+      case (Hourly, variant, Blitz) if variant.exotic              => TC(4 * 60, 2)
 
       case (Shield, variant, Blitz) if variant.exotic => TC(3 * 60, 2)
 
