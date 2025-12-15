@@ -1,3 +1,5 @@
+$pocket-height: 60px;
+
 .pocket {
   &-top {
     grid-area: mat-top;
@@ -27,6 +29,15 @@
     &-bottom {
       margin-top: $block-gap;
     }
+  }
+}
+
+.round__app.variant-crazyhouse {
+  @include mq-at-least-col2 {
+    // Ensure pockets don't reduce the max-height of the right column
+    // The grid has 14 rows with mat-top at row 3 and mat-bot at row 12
+    // We need to give explicit heights to these pocket rows
+    grid-template-rows: 0 auto $pocket-height auto auto auto auto auto auto auto auto $pocket-height auto;
   }
 }
 
