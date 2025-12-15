@@ -1,5 +1,3 @@
-$pocket-height: 60px;
-
 .pocket {
   &-top {
     grid-area: mat-top;
@@ -34,14 +32,10 @@ $pocket-height: 60px;
 
 .round__app.variant-crazyhouse {
   @include mq-at-least-col2 {
-    // Ensure pockets don't reduce the max-height of the right column
-    // The grid has 14 rows total:
-    // Row 1: voice (0), Row 2: empty (auto)
-    // Row 3: mat-top/pocket-top ($pocket-height)
-    // Rows 4-11: player/controls content (auto)
-    // Row 12: mat-bot/pocket-bot ($pocket-height)
-    // Rows 13-14: empty/kb-move (auto)
-    grid-template-rows: 0 auto $pocket-height auto auto auto auto auto auto auto auto $pocket-height auto;
+    // Allow moves list to expand while constraining pocket heights
+    // Row 7 (moves) gets 1fr to take available space
+    // Rows 3 and 12 (pockets) use fit-content to limit their size
+    grid-template-rows: 0 auto fit-content(60px) auto auto auto 1fr auto auto auto auto fit-content(60px) auto auto;
   }
 }
 
