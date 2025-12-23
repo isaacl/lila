@@ -30,6 +30,17 @@
   }
 }
 
+.round__app.variant-crazyhouse {
+  @include mq-at-least-col2 {
+    // Allow moves list to expand while constraining pocket heights
+    // Row 7 (moves) gets 1fr to take available space
+    // Rows 3 and 12 (pockets) use fit-content to limit their size
+    grid-template-rows: 0 auto fit-content(60px) auto auto auto 1fr auto auto auto auto fit-content(
+        60px
+      ) auto auto;
+  }
+}
+
 @include mq-at-least-col2 {
   @media (min-height: at-least($short)) {
     #{$moves-tag} {
